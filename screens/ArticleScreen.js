@@ -1,6 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {StyleSheet, SafeAreaView, Text, TouchableOpacity} from 'react-native';
 import {WebView} from 'react-native-webview';
+import {useDispatch, useSelector} from 'react-redux';
+import {addClip, deleteClip} from '../store/actions/user';
+import ClipButton from '../components/ClipButton';
 
 const styles = StyleSheet.create({
     container: {
@@ -9,14 +12,29 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ArticleScreen = ({route}) => {
+export default ArticleScreen = (props) => {
+    const {route} = props;
     const {article} = route.params;
-    console.log(article);
+
+    const user = useSelector((state) => state.user);
+
+    const dispatch = useDispatch();
+
+    const isClipped = () => {
+        return user.clips.some((clip) => clip.url === article.url);
+    };
+
+    const toggleClip = () => {
+        if (isClipped()) {
+            dispatch(deleteClip({clip: article}));
+        } else {
+            dispatch(addClip({clip: article}));
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity onPress={() => {}}>
-                <Text style={{margin: 10, fontsize: 30}}>ADD_CLIP</Text>
-            </TouchableOpacity>
+            <ClipButton onPress={toggleClip} enabled={isClipped()} />
             <WebView source={{uri: article.url}} />
         </SafeAreaView>
     );
