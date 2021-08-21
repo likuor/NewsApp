@@ -15,7 +15,8 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true
+            "bundleIdentifier": "com.bykokisakai.news-app",
+            "supportsTablet": false
         },
         "android": {
             "adaptiveIcon": {
